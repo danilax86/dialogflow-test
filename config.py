@@ -7,6 +7,10 @@ class Config(object):
     MAIL_PASSWORD = '<your_gmail_pass>'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    TWILIO_SID = '<your_twilio_SID>'
-    TWILIO_TOKEN = '<your_twilio_token>'
-    TWILIO_NUM = '<your_twilio_number>'
+    TWILIO_SID = 'TWILIO_SID'
+    TWILIO_TOKEN = 'TWILIO_TOKEN'
+    TWILIO_NUM = 'TWILIO_NUM'
+    AMOCRM_DOMAIN = 'AMOCRM_DOMAIN'
+    AMOCRM_AUTH = 'AMOCRM_AUTH'
+    AMOCRM_INTEGRATION_ID = 'AMOCRM_INTEGRATION_ID'
+    AMOCRM_SECRET = 'AMOCRM_SECRET'

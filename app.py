@@ -2,7 +2,9 @@ from flask import Flask, request, make_response, jsonify
 from flask_mail import Mail, Message
 from datetime import datetime
 from twilio.rest import Client
+from amocrm.v2 import tokens
 
+from Lead import Lead
 import config
 
 app = Flask(__name__)
@@ -11,6 +13,23 @@ mail = Mail(app)
 
 twilio_num = app.config['TWILIO_NUM']
 client = Client(app.config['TWILIO_SID'], app.config['TWILIO_TOKEN'])
+
+tokens.default_token_manager(
+    client_id = app.config['AMOCRM_INTEGRATION_ID'],
+    client_secret = app.config['AMOCRM_SECRET'],
+    subdomain = app.config['AMOCRM_DOMAIN'],
+    redirect_url = 'https://<hex>.ngrok.io',
+    storage = tokens.FileTokensStorage()
+)
+tokens.default_token_manager.init(
+    code = app.config['AMOCRM_AUTH'],
+    skip_error = True
+)
+
+
+def add_lead(name, number, email, date, time):
+    lead = Lead(name = name, number = number, email = email, date = date, time = time)
+    lead.create()
 
 
 def send_email_msg(sender, recipient, subject, text):
@@ -46,8 +65,9 @@ def results():
 
     send_email_msg(app.config['MAIL_USERNAME'], email, 'Appointment', text)
     send_sms(recipient_num, text)
+    add_lead(name, recipient_num, email, day, time)
 
-    return {'fulfillmentText': 'This is a response from webhook.'}
+    return {'fulfillmentText': f'Your appointment is scheduled for {day} at {time}, {name}.'}
 
 
 @app.route('/webhook', methods = ['GET', 'POST'])
