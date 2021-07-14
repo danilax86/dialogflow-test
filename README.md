@@ -21,6 +21,6 @@
 #### amoCRM:
 
 - create an integration
-- add URL from previous steps to your integration
+- add URL from previous steps to your integration (without "/webhook")
 - get an auth token, integration id and secret key
   (auth token gets refreshed each time you run an application or you are not sending requests while it is alive)
