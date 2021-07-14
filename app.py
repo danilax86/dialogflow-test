@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config.from_object(config.Config)
 mail = Mail(app)
 
-twilio_num = '+18327261645'
+twilio_num = app.config['TWILIO_NUM']
 client = Client(app.config['TWILIO_SID'], app.config['TWILIO_TOKEN'])
 
 
