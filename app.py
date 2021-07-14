@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, jsonify, json
+from flask import Flask, request, make_response, jsonify
 from flask_mail import Mail, Message
 from datetime import datetime
 from twilio.rest import Client
@@ -32,10 +32,8 @@ def send_sms(recipient_num, text):
 
 
 def results():
-    # build a request object
     req = request.get_json(force = True)
 
-    # fetch action from json
     date = datetime.fromisoformat(req.get('queryResult').get('parameters').get('date'))
     time = datetime.fromisoformat(req.get('queryResult').get('parameters').get('time'))
     day = str(date).split(' ')[0]
@@ -49,14 +47,11 @@ def results():
     send_email_msg(app.config['MAIL_USERNAME'], email, 'Appointment', text)
     send_sms(recipient_num, text)
 
-    # return a fulfillment response
     return {'fulfillmentText': 'This is a response from webhook.'}
 
 
-# create a route for webhook
 @app.route('/webhook', methods = ['GET', 'POST'])
 def webhook():
-    # return response
     return make_response(jsonify(results()))
 
 
